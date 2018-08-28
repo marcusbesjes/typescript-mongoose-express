@@ -1,6 +1,6 @@
 process.env.NODE_ENV = "testing";
 
-import { Author, IAuthor } from "../../models/models";
+import { Author, IAuthor } from "../../models";
 import * as chai from "chai";
 
 const expect = chai.expect;

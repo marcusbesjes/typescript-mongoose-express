@@ -1,12 +1,10 @@
-import { Router, Request, Response } from "express";
-import { Author } from "../../models/author/model";
+import { Request, Response, Router } from 'express'
+import { Material, Product } from '../../models'
 
-export class AuthorRouter {
+export class ProductsRouter {
+    private router: Router = Router()
 
-    private router: Router = Router();
-
-    getRouter(): Router {
-
+    public getRouter(): Router {
         /**
          * @swagger
          * /api/author:
@@ -25,12 +23,11 @@ export class AuthorRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.get("/author", async(request: Request, response: Response) => {
+        this.router.get('/products', async (request: Request, response: Response) => {
+            const products = await Product.find({}).exec()
 
-            const authors = await Author.find({}).exec();
-            
-            response.json(authors)
-        });
+            response.json(products)
+        })
 
         /**
          * @swagger
@@ -50,13 +47,15 @@ export class AuthorRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.post("/author", async(request: Request, response: Response) => {
+        this.router.post('/products', async (request: Request, response: Response) => {
+            try {
+                const product = await Product.create(request.body)
+                response.status(200).json(product)
+            } catch (err) {
+                response.status(500).json(err)
+            }
+        })
 
-            const author = await Author.create(request.body);
-
-            response.status(200).json(author);
-        });
-
-        return this.router;
+        return this.router
     }
 }
