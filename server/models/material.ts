@@ -17,7 +17,7 @@ const schema = new Schema({
     },
     description: {
         type: String,
-    },
+    }, 
     product: {
         type: Schema.Types.ObjectId,
         ref: 'Product',

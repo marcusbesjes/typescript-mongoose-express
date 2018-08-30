@@ -9,6 +9,7 @@ import { APIDocsRouter } from './routes/swagger'
 
 import { MaterialsRouter } from './routes/materials/materials'
 import { ProductsRouter } from './routes/products/products'
+import { OrdersRouter } from './routes/orders/orders'
 
 const app = express()
 
@@ -47,6 +48,7 @@ app.use('/docs', express.static(path.join(__dirname, './assets/swagger')))
 
 app.use('/api', new MaterialsRouter().getRouter())
 app.use('/api', new ProductsRouter().getRouter())
+app.use('/api', new OrdersRouter().getRouter())
 
 const server: http.Server = app.listen(process.env.PORT || 3000, () => {
     console.log('listening on port', process.env.PORT || 3000)
