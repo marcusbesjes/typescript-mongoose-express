@@ -1,5 +1,6 @@
 export * from './_author'
 export * from './_post'
+export * from './document'
 export * from './material'
 export * from './order-line'
 export * from './order'

@@ -1,39 +1,42 @@
-process.env.NODE_ENV = "testing";
+process.env.NODE_ENV = 'testing'
 
-import { Author, IAuthor } from "../../models";
-import * as chai from "chai";
+import { Author, IAuthor } from '../models'
+import * as chai from 'chai'
 
-const expect = chai.expect;
+const expect = chai.expect
 
-describe("Models Author", () => {
+describe('Models Author', () => {
+    let authorObject: IAuthor
 
-  let authorObject: IAuthor;
+    it('should insert new author', async () => {
+        const author = new Author()
+        author.name = 'John'
+        author.age = 30
+        author.description = 'He is writer'
 
-  it("should insert new author", async () => {
+        const res = await author.save()
+        authorObject = res
 
-    const author = new Author();
-    author.name = "John";
-    author.age = 30;
-    author.description = "He is writer";
+        expect(res).to.be.an('object')
+        expect(res.name).to.be.equal('John')
+    })
 
-    const res = await author.save();
-    authorObject = res;
+    it('should update user', async () => {
+        const results: { nModified: number } = await Author.updateAuthor(
+            authorObject._id,
+            'He is not writer',
+        )
 
-    expect(res).to.be.an("object");
-    expect(res.name).to.be.equal("John");
-  });
+        expect(+results.nModified).to.be.equal(1)
+    })
 
-  it("should update user", async () => {
-    const results: { nModified: number } = await Author.updateAuthor(authorObject._id, "He is not writer");
+    it('should update by age', async () => {
+        const results: { nModified: number } = await Author.updateByAge(21, 'Good one :)')
+        const author: IAuthor = <IAuthor>await Author.findById(authorObject._id)
+            .lean()
+            .exec()
 
-    expect(+results.nModified).to.be.equal(1);
-  });
-
-  it("should update by age", async () => {
-    const results: { nModified: number } = await Author.updateByAge(21, "Good one :)");
-    const author: IAuthor = <IAuthor>await Author.findById(authorObject._id).lean().exec();
-
-    expect(author.description).to.be.equal("Good one :)");
-    expect(+results.nModified).to.be.equal(1);
-  });
-});
+        expect(author.description).to.be.equal('Good one :)')
+        expect(+results.nModified).to.be.equal(1)
+    })
+})

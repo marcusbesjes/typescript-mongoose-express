@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express'
-import { Author } from '../../models/_author'
+import { Request, Response, Router } from 'express'
+import { BDocument } from '../models'
 
-export class AuthorRouter {
+export class DocumentsRouter {
     private router: Router = Router()
 
-    getRouter(): Router {
+    public getRouter(): Router {
         /**
          * @swagger
          * /api/author:
@@ -23,10 +23,10 @@ export class AuthorRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.get('/author', async (request: Request, response: Response) => {
-            const authors = await Author.find({}).exec()
+        this.router.get('/documents', async (request: Request, response: Response) => {
+            const documents = await BDocument.find({}).exec()
 
-            response.json(authors)
+            response.json(documents)
         })
 
         /**
@@ -47,10 +47,13 @@ export class AuthorRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.post('/author', async (request: Request, response: Response) => {
-            const author = await Author.create(request.body)
-
-            response.status(200).json(author)
+        this.router.post('/documents', async (request: Request, response: Response) => {
+            try {
+                const document = await BDocument.create(request.body)
+                response.status(200).json(document)
+            } catch (err) {
+                response.status(500).json(err)
+            }
         })
 
         return this.router

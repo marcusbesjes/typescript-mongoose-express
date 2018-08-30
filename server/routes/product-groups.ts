@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
-import { Order, OrderLine, IOrderLine } from '../../models'
+import { ProductGroup } from '../models'
 
-export class OrdersRouter {
+export class ProductGroupsRouter {
     private router: Router = Router()
 
     public getRouter(): Router {
@@ -23,12 +23,10 @@ export class OrdersRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.get('/orders', async (request: Request, response: Response) => {
-            const orders = await Order.find({})
-                .populate('orderLines')
-                .exec()
+        this.router.get('/product-groups', async (request: Request, response: Response) => {
+            const productGroups = await ProductGroup.find({}).exec()
 
-            response.json(orders)
+            response.json(productGroups)
         })
 
         /**
@@ -49,26 +47,11 @@ export class OrdersRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.post('/orders', async (request: Request, response: Response) => {
+        this.router.post('/product-groups', async (request: Request, response: Response) => {
             try {
-                const orderInput = request.body
-                const orderLinesInput = orderInput.orderLines
-                delete orderInput.orderLines
-                const order = new Order(orderInput)
-                console.log('\norder created', order)
-
-                const orderLineCreates = orderLinesInput.map((lineInput: IOrderLine) => {
-                    lineInput.order = order._id
-                    return OrderLine.create(lineInput).then((orderLine: IOrderLine) =>
-                        order.orderLines.push(orderLine._id),
-                    )
-                })
-
-                await Promise.all(orderLineCreates)
-                await order.save()
-                response.status(200).json(order)
+                const product = await ProductGroup.create(request.body)
+                response.status(200).json(product)
             } catch (err) {
-                console.log('terrible error during /orders handling', err)
                 response.status(500).json(err)
             }
         })

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express'
-import { Author } from '../../models/_author'
-import { Post } from '../../models/_post'
+import { Author } from '../models/_author'
+import { Post } from '../models/_post'
 
 export class PostRouter {
     public static routes(): Router {

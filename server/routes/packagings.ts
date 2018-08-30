@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
-import { Material, Product } from '../../models'
+import { Packaging } from '../models'
 
-export class MaterialsRouter {
+export class PackagingsRouter {
     private router: Router = Router()
 
     public getRouter(): Router {
@@ -23,12 +23,10 @@ export class MaterialsRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.get('/materials', async (request: Request, response: Response) => {
-            const materials = await Material.find({})
-                .populate('product')
-                .exec()
+        this.router.get('/packagings', async (request: Request, response: Response) => {
+            const packagings = await Packaging.find({}).exec()
 
-            response.json(materials)
+            response.json(packagings)
         })
 
         /**
@@ -49,10 +47,13 @@ export class MaterialsRouter {
          *       403:
          *         description: Forbidden
          */
-        this.router.post('/materials', async (request: Request, response: Response) => {
-            const material = await Material.create(request.body)
-
-            response.status(200).json(material)
+        this.router.post('/packagings', async (request: Request, response: Response) => {
+            try {
+                const packaging = await Packaging.create(request.body)
+                response.status(200).json(packaging)
+            } catch (err) {
+                response.status(500).json(err)
+            }
         })
 
         return this.router

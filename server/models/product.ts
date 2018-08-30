@@ -22,3 +22,13 @@ const schema = new Schema({
 })
 
 export const Product: IProductModel = mongoose.model<IProduct>('Product', schema)
+
+/*
+    {
+      "erp_id_reference": "slerpstring",
+      "erp_system_reference": "slerpstring",
+      "documents": ["5b87f4dc50feec342c5388ea"],
+      "name": "slerpstring",
+      "groups": ["5b87f6904678ec373a64901c"]
+    }
+*/

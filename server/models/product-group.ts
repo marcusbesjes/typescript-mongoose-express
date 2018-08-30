@@ -23,3 +23,10 @@ export const ProductGroup: IProductGroupModel = mongoose.model<IProductGroup>(
     'ProductGroup',
     schema,
 )
+
+/*
+    {
+      "name": "Mesh 1: very fine",
+      "group_type": "Mesh"
+    }
+*/
